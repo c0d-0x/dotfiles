@@ -1,0 +1,5 @@
+#!/bin/env bash
+
+pkill -x waybar
+
+nohup waybar >/dev/null 2>&1 &
