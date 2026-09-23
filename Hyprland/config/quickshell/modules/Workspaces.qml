@@ -1,4 +1,3 @@
-//@ pragma ComponentBehavior:Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Hyprland
@@ -18,20 +17,9 @@ Rectangle {
         "1", "2", "3", "4", "5", "6", "7", "8", "9"
     ]
 
-    Connections{
-        function onRawEvent(event){
-            if(event.name ==="configreloaded"){
-                Hyprland.refreshWorkspaces()
-                Hyprland.focusedWorkspace?.activate()
-            }
-
-        }
-        target:Hyprland
-    }
     readonly property var visibleWsps: root.persistent
     property string activeWorkspace: {
         (()=> {
-                Hyprland.refreshWorkspaces();
                 if (Hyprland.focusedWorkspace) 
                     return Hyprland.focusedWorkspace.name;
                 
