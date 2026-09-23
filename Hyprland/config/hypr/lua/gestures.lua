@@ -7,11 +7,10 @@ hl.gesture({
 hl.gesture({
 	fingers = 3,
 	direction = "up",
+	disable_inhibit = true,
 	action = function()
-		-- hl.exec_cmd("pkill -SIGUSR1 waybar")
 		hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
 	end,
-	disable_inhibit = true,
 })
 
 hl.gesture({
@@ -19,7 +18,7 @@ hl.gesture({
 	direction = "down",
 	mods = "SUPER",
 	action = function()
-		hl.exec_cmd("hyprlock")
+		hl.dispatch(hl.dsp.exec_cmd("hyprlock"))
 	end,
 })
 

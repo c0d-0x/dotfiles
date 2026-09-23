@@ -1,12 +1,13 @@
--- FLOAT RULES
-local float_apps = {
+local float_wins = {
 	"^(.*[Aa]mberol.*)$",
 	"^(.*[Bb]lueman-manager.*)$",
 	"^(.*[Cc]heese.*)$",
 	"^(.*[Dd]iscord.*)$",
 	"^(.*[Ff]lameshot.*)$",
+	"^(.*[Ff]ileRoller*)$",
 	"^(.*[Gg]alculator.*)$",
 	"^(.*[Mm]ousepad.*)$",
+	"^(.*[Nn]omacs.*)$",
 	"^(.*[Nn]m-connection-editor.*)$",
 	"^(.*[Pp]acket[Tt]racer.*)$",
 	"^(.*[Pp]rotonvpn-app.*)$",
@@ -21,9 +22,9 @@ local float_apps = {
 	"^(.*[Ii]mv.*)$",
 }
 
-for _, reg in ipairs(float_apps) do
+for _, win in ipairs(float_wins) do
 	hl.window_rule({
-		match = { class = reg },
+		match = { class = win },
 		float = true,
 	})
 end

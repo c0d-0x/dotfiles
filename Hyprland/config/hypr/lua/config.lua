@@ -14,7 +14,6 @@ hl.config({
 		gaps_in = 3,
 		gaps_out = 3,
 		float_gaps = 5,
-
 		border_size = 1,
 		["col.active_border"] = c.colour5,
 		["col.inactive_border"] = c.colour5,
@@ -41,7 +40,6 @@ hl.config({
 			indicator_height = 4,
 			["col.active"] = c.colour5,
 			["col.inactive"] = c.colour2,
-
 			render_titles = false,
 			keep_upper_gap = false,
 		},
@@ -50,7 +48,6 @@ hl.config({
 	decoration = {
 		rounding = 5,
 		rounding_power = 3,
-
 		active_opacity = 1.0,
 		inactive_opacity = 0.8,
 
@@ -67,7 +64,6 @@ hl.config({
 			vibrancy = 0.3,
 			vibrancy_darkness = 0.25,
 			new_optimizations = true,
-
 			brightness = 1,
 			contrast = 0.89,
 			popups = false,
@@ -75,12 +71,6 @@ hl.config({
 			input_methods = true,
 			input_methods_ignorealpha = 0.8,
 		},
-
-		-- glow = {
-		-- 	enabled = true,
-		-- 	range = 5,
-		-- 	color = c.colour5,
-		-- },
 	},
 
 	animations = {
@@ -107,7 +97,6 @@ hl.config({
 		key_press_enables_dpms = true,
 		disable_autoreload = false,
 		enable_swallow = false,
-
 		vrr = 1,
 	},
 
@@ -117,7 +106,6 @@ hl.config({
 
 	input = {
 		kb_layout = "us",
-
 		follow_mouse = 1,
 		sensitivity = 0,
 

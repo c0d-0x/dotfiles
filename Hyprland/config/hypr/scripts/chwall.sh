@@ -29,10 +29,9 @@ else
     WALLPAPER=$(find "$WALLPAPER_DIR" -type f -iregex '.*\.\(jpg\|png\)$' | shuf -n 1)
 fi
 
-hyprctl hyprpaper wallpaper ", $WALLPAPER" &
 
-hellwal -i $WALLPAPER -b 0.5 -g 0.09 --static-background "#000000" --static-foreground "#FFFFFF" --skip-term-colors &
+hellwal -i $WALLPAPER -b 0.5 -g 0.09 --static-background "#000000" --static-foreground "#FFFFFF" --skip-term-colors -q 2>/dev/null
 ln -sf $WALLPAPER ~/.bg
-hyprctl reload hyprland
 swaync-client -rs
+hyprctl hyprpaper wallpaper ", $WALLPAPER" 2>/dev/null&
 exit 0

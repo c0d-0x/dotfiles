@@ -15,6 +15,23 @@ local terminal2 = "kitty"
 
 -- APP LAUNCHERS
 local ts_state = true
+local blue_state = true
+
+hl.bind(mainMod .. " + B", function()
+	local opt = "on"
+	if blue_state then
+		opt = "off"
+	end
+
+	blue_state = not blue_state
+	hl.dispatch(hl.dsp.exec_cmd("bluetoothctl power " .. opt))
+	if blue_state then
+		hl.notification.create({ text = "bluetooth on", duration = 2000, icon = "ok" })
+	else
+		hl.notification.create({ text = "bluetooth off", duration = 2000, icon = "ok" })
+	end
+end)
+
 hl.bind(mainMod .. " + CTRL + T", function()
 	hl.device({
 		name = "elan-touchscreen",
@@ -52,10 +69,10 @@ hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "u" }))
 hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "d" }))
 
 -- RESIZE
-hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.resize({ x = -10, y = 0, relative = true }), { repeating = true })
-hl.bind(mainMod .. " + CTRL + L", hl.dsp.window.resize({ x = 10, y = 0, relative = true }), { repeating = true })
-hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.resize({ x = 0, y = 10, relative = true }), { repeating = true })
-hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = -10, relative = true }), { repeating = true })
+hl.bind(mainMod .. " +  CTRL + H", hl.dsp.window.resize({ x = -5, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " +  CTRL + L", hl.dsp.window.resize({ x = 5, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " +  CTRL + K", hl.dsp.window.resize({ x = 0, y = 5, relative = true }), { repeating = true })
+hl.bind(mainMod .. " +  CTRL + J", hl.dsp.window.resize({ x = 0, y = -5, relative = true }), { repeating = true })
 
 -- MOVE WINDOWS
 hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.move({ direction = "l" }))
@@ -65,8 +82,8 @@ hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "d" }))
 hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.center())
 
 -- WORKSPACES
-for i = 1, 10 do
-	local key = i % 10
+for i = 1, 9 do
+	local key = i
 	hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
 	hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i, follow = true }))
 	hl.bind(mainMod .. " + CTRL + " .. key, hl.dsp.window.move({ workspace = i, follow = false }))
@@ -75,19 +92,8 @@ end
 hl.bind(mainMod .. " + SHIFT + tab", hl.dsp.focus({ workspace = "m-1" }))
 hl.bind(mainMod .. " + tab", hl.dsp.focus({ workspace = "m+1" }))
 
--- GROUPS
-hl.bind(mainMod .. " + G", hl.dsp.group.toggle())
-hl.bind(secondMod .. " + tab", hl.dsp.group.next())
-hl.bind(secondMod .. " + L", hl.dsp.group.lock())
-hl.bind(secondMod .. " + SHIFT + tab", hl.dsp.group.prev())
-hl.bind(secondMod .. " + SHIFT + G", hl.dsp.window.move({ out_of_group = true }))
-hl.bind(mainMod .. " + SHIFT + G", hl.dsp.window.move({ into_group = "right" }))
-
 -- SCRATCHPAD
-hl.bind(mainMod .. " + SHIFT + X", function()
-	-- hl.exec_cmd("pkill -SIGUSR1 waybar")
-	hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
-end)
+hl.bind(mainMod .. " + SHIFT + X", hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mainMod .. " + X", hl.dsp.window.move({ workspace = "special:magic", follow = false }))
 
 -- MOUSE
@@ -133,3 +139,48 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 -- SCREENSHOTS
 hl.bind("Print", hl.dsp.exec_cmd('grim -g "$(slurp)" - | swappy -f -'))
 hl.bind("SUPER + Print", hl.dsp.exec_cmd('grim -g "$(slurp -d)" - | wl-copy'))
+
+-- Tiled and Floating
+hl.bind("SUPER + space", function()
+	hl.dispatch(hl.dsp.window.cycle_next({
+		floating = not hl.get_active_window().floating,
+	}))
+end, { description = "Switch focus between tiled and floating windows" })
+
+-- GROUPS
+
+local map = function(key, action, description)
+	hl.bind(key, function()
+		hl.dispatch(action)
+		hl.dispatch(hl.dsp.submap("reset"))
+	end, { description = description })
+end
+
+hl.bind(mainMod .. " + SPACE", hl.dsp.submap("group_management"), { description = "Enter a group management submap" })
+hl.bind(secondMod .. " + SHIFT + tab", hl.dsp.group.prev())
+hl.bind(secondMod .. " + tab", hl.dsp.group.next())
+
+hl.define_submap("group_management", function()
+	map("g", hl.dsp.group.toggle(), "Toggle window group")
+
+	map("h", hl.dsp.window.move({ into_group = "l" }), "Move window into a group on the left")
+	map("j", hl.dsp.window.move({ into_group = "d" }), "Move window into a group on the bottom")
+	map("k", hl.dsp.window.move({ into_group = "u" }), "Move window into a group on the top")
+	map("l", hl.dsp.window.move({ into_group = "r" }), "Move window into a group on the right")
+
+	map("SPACE", hl.dsp.window.move({ out_of_group = true }), "Move window out of group")
+
+	map("n", hl.dsp.group.next(), "Next window in group")
+	map("p", hl.dsp.group.prev(), "Previous window in group")
+
+	map("f", hl.dsp.group.move_window(), "Move window forward in the group order")
+	map("b", hl.dsp.group.move_window({ forward = false }), "Move window backward in the group order")
+
+	map("t", hl.dsp.group.lock_active(), "Toggle group lock")
+
+	for i = 1, 10 do
+		map(tostring(i % 10), hl.dsp.group.active({ index = i }), "Focus window " .. i .. " in a group")
+	end
+
+	hl.bind("escape", hl.dsp.submap("reset"), { description = "Quit submap" })
+end)
