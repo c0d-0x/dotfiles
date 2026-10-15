@@ -49,7 +49,7 @@ Rectangle {
     }
 
     Timer {
-        interval: 1000
+        interval: 600
         running: true
         repeat: true
         triggeredOnStart: true

@@ -30,8 +30,8 @@ else
 fi
 
 
-hellwal -i $WALLPAPER -b 0.5 -g 0.09 --static-background "#000000" --static-foreground "#FFFFFF" --skip-term-colors -q 2>/dev/null
+hellwal -i $WALLPAPER -b 0.5 -g 0.09 --static-background "#000000" --static-foreground "#F8F8FF" --skip-term-colors -q 2>/dev/null
 ln -sf $WALLPAPER ~/.bg
-swaync-client -rs
-hyprctl hyprpaper wallpaper ", $WALLPAPER" 2>/dev/null&
+swaync-client -rs 2>/dev/null
+hyprctl hyprpaper wallpaper ", $WALLPAPER" 2>/dev/null
 exit 0

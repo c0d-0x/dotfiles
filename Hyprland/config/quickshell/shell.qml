@@ -112,6 +112,10 @@ ShellRoot {
                         colours: root.colours
                     }
 
+                    Modules.Visualizer {
+                        colours: root.colours
+                    }
+
                 }
 
                 Modules.Clock {

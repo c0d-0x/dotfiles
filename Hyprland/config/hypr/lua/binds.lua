@@ -9,7 +9,6 @@ local clip_style = "~/.config/rofi/clipboard.rasi"
 local set_wallpaper = scripts .. "/chwall.sh"
 local restart_waybar = scripts .. "/restart_waybar.sh"
 local show_clipboard = "cliphist list | rofi -theme " .. clip_style .. " -dmenu | cliphist decode | wl-copy"
-local show_emoji = "rofimoji --skin-tone light --action clipboard  --no-frecency"
 local terminal = "alacritty"
 local terminal2 = "kitty"
 
@@ -50,7 +49,6 @@ hl.bind(mainMod .. " + CTRL + P", hl.dsp.exec_cmd(power_menu))
 hl.bind(mainMod .. " + CTRL + W", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(show_clipboard))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(show_emoji))
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(set_wallpaper))
@@ -156,31 +154,42 @@ local map = function(key, action, description)
 	end, { description = description })
 end
 
-hl.bind(mainMod .. " + SPACE", hl.dsp.submap("group_management"), { description = "Enter a group management submap" })
+hl.bind(mainMod .. " + SPACE", hl.dsp.submap("groups"), { description = "Enter a group management submap" })
 hl.bind(secondMod .. " + SHIFT + tab", hl.dsp.group.prev())
 hl.bind(secondMod .. " + tab", hl.dsp.group.next())
 
-hl.define_submap("group_management", function()
-	map("g", hl.dsp.group.toggle(), "Toggle window group")
+hl.define_submap("groups", function()
+	map("G", hl.dsp.group.toggle(), "Toggle window group")
 
-	map("h", hl.dsp.window.move({ into_group = "l" }), "Move window into a group on the left")
-	map("j", hl.dsp.window.move({ into_group = "d" }), "Move window into a group on the bottom")
-	map("k", hl.dsp.window.move({ into_group = "u" }), "Move window into a group on the top")
-	map("l", hl.dsp.window.move({ into_group = "r" }), "Move window into a group on the right")
+	map("H", hl.dsp.window.move({ into_group = "l" }), "Move window into a group on the left")
+	map("J", hl.dsp.window.move({ into_group = "d" }), "Move window into a group on the bottom")
+	map("K", hl.dsp.window.move({ into_group = "u" }), "Move window into a group on the top")
+	map("L", hl.dsp.window.move({ into_group = "r" }), "Move window into a group on the right")
 
 	map("SPACE", hl.dsp.window.move({ out_of_group = true }), "Move window out of group")
 
-	map("n", hl.dsp.group.next(), "Next window in group")
-	map("p", hl.dsp.group.prev(), "Previous window in group")
+	map("N", hl.dsp.group.next(), "Next window in group")
+	map("P", hl.dsp.group.prev(), "Previous window in group")
 
-	map("f", hl.dsp.group.move_window(), "Move window forward in the group order")
-	map("b", hl.dsp.group.move_window({ forward = false }), "Move window backward in the group order")
+	map("F", hl.dsp.group.move_window(), "Move window forward in the group order")
+	map("B", hl.dsp.group.move_window({ forward = false }), "Move window backward in the group order")
 
-	map("t", hl.dsp.group.lock_active(), "Toggle group lock")
+	map("T", hl.dsp.group.lock_active(), "Toggle group lock")
 
 	for i = 1, 10 do
 		map(tostring(i % 10), hl.dsp.group.active({ index = i }), "Focus window " .. i .. " in a group")
 	end
+
+	hl.bind("escape", hl.dsp.submap("reset"), { description = "Quit submap" })
+end)
+
+-- MPD
+hl.bind(mainMod .. " + M", hl.dsp.submap("mpd"))
+
+hl.define_submap("mpd", function()
+	map("N", hl.dsp.exec_cmd('mpc next -h "@mpd"'))
+	map("P", hl.dsp.exec_cmd('mpc prev -h "@mpd"'))
+	map("SPACE", hl.dsp.exec_cmd('mpc toggle -h "@mpd"'))
 
 	hl.bind("escape", hl.dsp.submap("reset"), { description = "Quit submap" })
 end)
